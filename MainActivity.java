@@ -1,11 +1,14 @@
 package com.example.intouch;
 
 import android.support.v7.app.ActionBarActivity;
+
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.PhoneLookup;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.database.Cursor;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,6 +19,7 @@ public class MainActivity extends ActionBarActivity {
 	// Create an entire Linear Layout. We add each contact into the 
 	// Layout if they have a phone number.
 	LinearLayout linearLayout;
+	boolean contactSelected = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +53,9 @@ public class MainActivity extends ActionBarActivity {
     // New
     public void searchContacts() {
     // Still not sure how cursors work, these first three lines are from the internet
-    Cursor people = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);{
-    
+    String orderBy = "DISPLAY_NAME";
+    Cursor people = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, orderBy);{
+    int i = 0;
     while(people.moveToNext()) {
 	   int nameFieldColumnIndex = people.getColumnIndex(PhoneLookup.DISPLAY_NAME);
 	   // Each contact has a table with a large number of columns containing info about him/her. 
@@ -59,15 +64,43 @@ public class MainActivity extends ActionBarActivity {
 	   if (hasPhone == 1)
 	   {
 		   String contact = people.getString(nameFieldColumnIndex); // Get person's name
-		   TextView tv = new TextView(this);
-		   tv.setText(String.valueOf(contact));
+		   //setContentView(R.layout.contacts_list_item);
+		   TextView tv = (TextView)LayoutInflater.from(MainActivity.this).inflate(R.layout.contacts_list_item, linearLayout, false);
+		   tv.setId(i+1);
+		   
+		   tv.setText(contact);
+		   final int index = i;
 		   tv.setTextSize(20); // Size of letters
 		   tv.setPadding(0,35,0,35); // Padding between name and border
+		   
+		   
+		   
+		   tv.setOnClickListener(new View.OnClickListener()
+		   {
+			   
+			   public void onClick(View v)
+			   {
+				   
+				   TextView tv = (TextView)findViewById(index+1);
+				   tv.setSelected(!v.isSelected());
+				   
+				   
+			   }
+			   
+		   });
+	   	   
 		   linearLayout.addView(tv);
+		   i++;
 	   }
     }
     people.close();
-}
-}
+    }
+    }
+    
+    public void onClick(View view)
+    {
+    	
+    }
+    
 }
 
