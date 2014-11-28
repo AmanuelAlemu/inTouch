@@ -25,3 +25,7 @@ Added checkmark and plus icons.
 I think it's easier to just copy the whole res folder into the project. Inside the inTouch project folder, just
 replace the res folder with the one here. The checkmark and plus icons are in there and some other xml files.
 Let me know if it doesn't work.
+
+Push #3 11/27
+Huge update to activity_main.xml
+Replace the current one. Can be found in inTouch > res > layout
